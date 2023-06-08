@@ -1,5 +1,5 @@
 const router = require('express').Router()
-
+const places = require('../models/places.js')
 
 //POST
 router.post('/', (req, res) => {
