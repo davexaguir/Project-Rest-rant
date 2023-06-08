@@ -1,5 +1,10 @@
 const router = require('express').Router()
 
+// New
+router.get('/new', (req, res) => {
+  res.render('places/new')
+})
+// Index
 router.get('/', (req, res) => {
     let places = [{
         name: 'H-Thai-ML',
@@ -11,7 +16,7 @@ router.get('/', (req, res) => {
         name: 'Coding Cat Cafe',
         city: 'Phoenix',
         state: 'AZ',
-        cuisines: 'Coffee, Bakery',
+        cuisines: 'Coffe~e, Bakery',
         pic: '/images/spices.jpg'
       }]
       
