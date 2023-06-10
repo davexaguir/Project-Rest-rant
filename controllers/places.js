@@ -1,33 +1,69 @@
 const router = require('express').Router()
-const places = require('../models/places')
+const places = require('../models/places.js')
 
-//POST
+//index
+router.get('/', (req, res) => {
+    res.render('places/index', {places})
+})
+//new
+router.get("/new", (req, res) => {
+  res.render("places/new");
+})
+
+//post
 router.post('/', (req, res) => {
-  console.log(req.body) 
   if (!req.body.pic) {
     req.body.pic = 'http://placekitten.com/400/400'
   }
-  if (!req.body.city) {
-    req.body.city = 'Anytown'
+  if (!req.body.city){
+    req.body.city = "Anytown"
   }
-  if (!req.body.state){
-    req.body.state = 'USA'
+  if (!req.body.state) {
+    req.body.state = "USA"
   }
   places.push(req.body)
   res.redirect('/places')
 })
 
-// Index
-router.get('/', (req, res) => {
- res.render('places/index', {places})
+//Click link/EDIT
+router.get('/:id/edit', (req, res) => {
+  let id = Number(req.params.id)
+  if (isNaN(id)) {
+      res.render('error404')
+  }
+  else if (!places[id]) {
+      res.render('error404')
+  }
+  else {
+    res.render('places/edit', {place: places[id], id})
+  }
 })
 
-// New
-router.get('/new', (req, res) => {
-  res.render('places/new')
+//Show/ID/Edit button
+router.put('/:id', (req, res)=>{
+  let id = Number(req.params.id)
+  if (isNaN(id)) {
+    res.render('error404')
+  }
+  else if (!places[id]) {
+    res.render('error404')
+  }
+  else {
+    if (!req.body.pic) {
+      req.body.pic = 'http://placekitten.com/400/400'
+    }
+    if (!req.body.city){
+      req.body.city = 'Anytown'
+    }
+    if (!req.body.state) {
+      req.body.state = 'USA'
+    }
+    places[id] = req.body
+  res.redirect(`/places/${id}`)
+  }
 })
 
-//Show 
+//Show
 router.get('/:id', (req, res) => {
   let id = Number(req.params.id)
   if (isNaN(id)) {
@@ -37,11 +73,12 @@ router.get('/:id', (req, res) => {
     res.render('error404')
   }
   else {
-    res.render('places/show', {place: places[id], ID})
+    res.render('places/show', { place: places[id], id })
   }
 })
 
-// Delete
+
+//Delete
 router.delete('/:id', (req, res) => {
   let id = Number(req.params.id)
   if (isNaN(id)) {
@@ -52,50 +89,8 @@ router.delete('/:id', (req, res) => {
   }
   else {
     places.splice(id, 1)
-    res.redirect('/places')
+  res.redirect('/places')
   }
 })
-
-//Edit
-router.get('/:id/edit', (req, res) => {
-  let id = Number(req.params.id)
-  if (isNaN(id)) {
-      res.render('error404')
-  }
-  else if (!places[id]) {
-      res.render('error404')
-  }
-  else {
-    res.render('places/edit', { place: places[id] })
-  }
-})
-
-router.put('/:id', (req, res) => {
-  let id = Number(req.params.id)
-  if (isNaN(id)) {
-      res.render('error404')
-  }
-  else if (!places[id]) {
-      res.render('error404')
-  }
-  else {
-      // Dig into req.body and make sure data is valid
-      if (!req.body.pic) {
-          // Default image if one is not provided
-          req.body.pic = 'http://placekitten.com/400/400'
-      }
-      if (!req.body.city) {
-          req.body.city = 'Anytown'
-      }
-      if (!req.body.state) {
-          req.body.state = 'USA'
-      }
-
-      // Save the new data into places[id]
-      places[id] = req.body
-      res.redirect(`/places/${id}`)
-  }
-})
-
 
 module.exports = router
