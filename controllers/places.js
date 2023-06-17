@@ -2,6 +2,9 @@ const router = require('express').Router()
 const places = require('../models/places.js')
 const db = require('../models')
 
+
+
+
 // //index
 
 router.get('/', (req, res) => {
@@ -45,7 +48,9 @@ router.get('/new', (req, res) => {
 
 router.get('/:id', (req, res) => {
   db.Place.findById(req.params.id)
+  .populate('comments')
   .then(place => {
+    console.log(place.comments)
       res.render('places/show', { place })
   })
   .catch(err => {
