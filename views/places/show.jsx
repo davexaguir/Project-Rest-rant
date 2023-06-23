@@ -20,7 +20,7 @@ function show (data) {
     let averageRating = sumRatings / data.place.comments.length
     rating = (
       <h3>
-        {averageRating} stars
+        {Math.round(averageRating)} stars
       </h3>
     )
     comments = data.place.comments.map(c => {
