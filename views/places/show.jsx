@@ -17,10 +17,14 @@ function show (data) {
     let sumRatings = data.place.comments.reduce((tot, c) =>{
       return tot + c.stars
     }, 0)
-    let averageRating = sumRatings / data.place.comments.length
+    let averageRating = Math.round(sumRatings / data.place.comments.length)
+    let stars = ''
+    for (let i = 0; i < averageRating; i++) {
+      stars += '⭐'
+    }
     rating = (
       <h3>
-        {Math.round(averageRating)} stars
+         {stars}stars
       </h3>
     )
     comments = data.place.comments.map(c => {
@@ -32,6 +36,9 @@ function show (data) {
             <stong>- {c.author}</stong>
           </h3>
           <h4>Rating: {c.stars}</h4>
+          <form method='POST' action={`/places/${data.place.id}/comment/${c.id}?_method=DELETE`}>
+            <input type="submit" className='btn btn-danger' value='Delete Comment' />
+          </form>
         </div>
       )
     })
