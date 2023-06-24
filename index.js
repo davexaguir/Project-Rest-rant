@@ -1,8 +1,8 @@
-require('dotenv').config()
 const express = require('express')
 const app = express()
 const methodOverride = require('method-override')
 
+require('dotenv').config()
 
 // Middleware
 app.set('views', __dirname + '/views')
@@ -20,6 +20,12 @@ app.use('/places', require('./controllers/places'))
 app.get('/', (req, res) => {
     res.render('home')
 })
+
+const PORT = process.env.PORT || 3001
+mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true},
+    () => {console.log('connected to : ', process.env.MONGO_URI)}
+    )
+
 // 404 page
 app.get('*', (req, res) => {
     res.render('error404')
