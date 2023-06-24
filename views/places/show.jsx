@@ -3,20 +3,20 @@ const Def = require('../default')
 const comments = require('../../models/comment.js')
 
 function show (data) {
-  let comments = (
+  let comments = 
     <h3 className='inactive'>
       No comments yet!
     </h3>
-  )
-  let rating = (
+  let rating = 
     <h3 className='inactive'>
       Not yet rated
     </h3>
-  )
   if (data.place.comments.length) {
+    comments = data.place.comments.map((c) => {
     let sumRatings = data.place.comments.reduce((tot, c) =>{
       return tot + c.stars
     }, 0)
+
     let averageRating = Math.round(sumRatings / data.place.comments.length)
     let stars = ''
     for (let i = 0; i < averageRating; i++) {
@@ -27,9 +27,8 @@ function show (data) {
          {stars}stars
       </h3>
     )
-    comments = data.place.comments.map(c => {
       return (
-        <div className="border">
+        <div className="col-sm-4 rant-box">
           <h2 className="rant">{c.rant ? 'Rant! 🤬' : 'Rave! 💖'}</h2>
           <h4>{c.content}</h4>
           <h3>
@@ -48,20 +47,19 @@ function show (data) {
           <main>
             <div className='row'>
               <div className='col-sm-6'>
-                <img src={data.place.pic} alt={data.place.name} width={750}/>
+                <img className='img-fluid' src={data.place.pic} alt={data.place.name} width={500}/>
                 <h3>
-                  Located in {data.place.city}, {data.place.state}
+                  Located in {data.place.city}, {data.place.state}{''}
                 </h3>
               </div>
               <div className='col-sm-6'>
                 <h1>{data.place.name}</h1>
-                <h4>
-                  Rating
-                  </h4>
+                <div>
+                <h4>Rating</h4>
                   {rating}
                   <br/>
-                  <h3>Not Rated</h3>
-                  <br/>
+                </div>
+                  <div>
                 <h2>
                   Description
                 </h2>
@@ -71,20 +69,23 @@ function show (data) {
                 <h4>
                   Serving {data.place.cuisines}
                 </h4>
+                </div>
               <a href={`/places/${data.id}/edit`} className="btn btn-warning">
-                Edit
-                </a>
-
+                Edit</a>
+              <br/>
              <form method="POST" action={`/places/${data.place.id}?_method=DELETE`}> 
                <button type="submit" className="btn btn-danger">
                 Delete
                </button>
               </form>
+           </div>
+           <hr/>
+           </div>
+           <div className='row'></div>   
           <h2>Comments</h2>
           {comments}
-            </div>
-          </div>
           <hr />
+          <div className='rant-post-box'></div>
           <h2>Does {data.place.name} deserve a Rave 💖 or a Rant 🤬? </h2>
           <form method="POST" action={`/places/${data.place.id}/comment`}>
             <div className='row'>
